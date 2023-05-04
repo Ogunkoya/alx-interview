@@ -9,9 +9,9 @@ def minOperations(n):
     if n == 1:
         return 0
     
-    # Find smallest prime factors
-    for i in range(2, int((n/2)+1)):
+    
+    for index in range(2, int((n/2)+1)):
         if n % i == 0:
-            return minOperations(int(n / i)) + i
+            return minOperations(int(n / index)) + index
 
     return n
