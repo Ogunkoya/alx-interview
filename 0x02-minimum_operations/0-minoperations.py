@@ -11,7 +11,7 @@ def minOperations(n):
     
     
     for index in range(2, int((n/2)+1)):
-        if n % i == 0:
+        if n % index == 0:
             return minOperations(int(n / index)) + index
 
     return n
