@@ -1,53 +1,41 @@
 #!/usr/bin/python3
+"""
+    A python script that reads standard out line by line and computes metrics
+"""
 import sys
-import random
-import datetime
-import time
 
-# Variables to track statistics
-total_size = 0
-status_counts = {}
 
-# Function to print statistics
-def print_statistics():
-    print(f"File size: {total_size}")
+def print_msg(codes, file_size):
+    print("File size: {}".format(file_size))
+    for key, val in sorted(codes.items()):
+        if val != 0:
+            print("{}: {}".format(key, val))
 
-    # Sort status codes in ascending order
-    sorted_status_codes = sorted(status_counts.keys())
 
-    # Print number of lines for each status code
-    for status_code in sorted_status_codes:
-        count = status_counts.get(status_code, 0)
-        if count > 0:
-            print(f"{status_code}: {count}")
+file_size = 0
+code = 0
+count_lines = 0
+codes = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
+         "404": 0, "405": 0, "500": 0}
 
-# Read input from stdin
 try:
-    line_count = 0
-    for i in range(10000):
-        time.sleep(random.random())
+    for line in sys.stdin:
+        parsed_line = line.split()
+        parsed_line = parsed_line[::-1]
 
-        ip_address = f"{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}.{random.randint(1, 255)}"
-        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        status_code = random.choice([200, 301, 400, 401, 403, 404, 405, 500])
-        file_size = random.randint(1, 1024)
+        if len(parsed_line) > 2:
+            count_lines += 1
 
-        line = f"{ip_address} - [{current_time}] \"GET /projects/260 HTTP/1.1\" {status_code} {file_size}"
+            if count_lines <= 10:
+                file_size += int(parsed_line[0])
+                code = parsed_line[1]
 
-        # Update statistics
-        total_size += file_size
-        status_counts[status_code] = status_counts.get(status_code, 0) + 1
+                if (code in codes.keys()):
+                    codes[code] += 1
 
-        line_count += 1
+            if (count_lines == 10):
+                print_msg(codes, file_size)
+                count_lines = 0
 
-        # Print statistics after every 10 lines
-        if line_count % 10 == 0:
-            print_statistics()
-
-        # Write the line to stdout
-        sys.stdout.write(line + '\n')
-        sys.stdout.flush()
-
-except KeyboardInterrupt:
-    # Handle keyboard interruption (CTRL+C)
-    print_statistics()
+finally:
+    print_msg(codes, file_size)
