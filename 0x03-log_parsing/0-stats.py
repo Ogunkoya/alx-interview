@@ -5,6 +5,7 @@
 import sys
 
 
+
 def print_msg(codes, file_size):
     print("File size: {}".format(file_size))
     for key, val in sorted(codes.items()):
@@ -15,8 +16,16 @@ def print_msg(codes, file_size):
 file_size = 0
 code = 0
 count_lines = 0
-codes = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0,
-         "404": 0, "405": 0, "500": 0}
+codes = {
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0
+}
 
 try:
     for line in sys.stdin:
