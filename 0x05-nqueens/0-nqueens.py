@@ -1,5 +1,7 @@
 #!/usr/bin/python3
+
 import sys
+
 
 def is_safe(board, row, col, N):
     # Check if a queen can be placed at board[row][col]
@@ -27,11 +29,13 @@ def is_safe(board, row, col, N):
 
     return True
 
+
 def solve_nqueens(N):
     board = [['.' for _ in range(N)] for _ in range(N)]
     solutions = []
     solve_util(board, 0, N, solutions)
     return solutions
+
 
 def solve_util(board, col, N, solutions):
     if col == N:
@@ -50,11 +54,13 @@ def solve_util(board, col, N, solutions):
             solve_util(board, col + 1, N, solutions)
             board[row][col] = '.'
 
+
 def print_solutions(solutions):
     for solution in solutions:
         for row in solution:
             print(row)
         print()
+
 
 def main():
     # Check the number of arguments
@@ -76,6 +82,7 @@ def main():
 
     solutions = solve_nqueens(N)
     print_solutions(solutions)
+
 
 if __name__ == '__main__':
     main()
