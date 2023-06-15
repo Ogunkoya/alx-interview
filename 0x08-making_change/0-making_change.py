@@ -34,3 +34,4 @@ def makeChange(coins, total):
 
     if table[total] == sys.maxsize:
         return -1
+    return table[total]
