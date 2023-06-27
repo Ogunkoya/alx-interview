@@ -2,41 +2,46 @@
 """0. Prime Game - Maria and Ben are playing a game"""
 
 def isWinner(x, nums):
-    """x - rounds
-    nums - numbers list
-    """
-    if x <= 0 or nums is None:
-        return None
-    if x != len(nums):
-        return None
+    def is_prime(num):
+        if num < 2:
+            return False
+        for i in range(2, int(num ** 0.5) + 1):
+            if num % i == 0:
+                return False
+        return True
 
-    ben = 0
-    maria = 0
+    def play_game(n):
+        primes = []
+        for num in range(2, n + 1):
+            if is_prime(num):
+                primes.append(num)
 
-    a = [1 for x in range(sorted(nums)[-1] + 1)]
-    a[0], a[1] = 0, 0
-    for i in range(2, len(a)):
-        rm_multiples(a, i)
+        turns = 0
+        while len(primes) > 0:
+            if turns % 2 == 0:
+                player = "Maria"
+            else:
+                player = "Ben"
 
-    for i in nums:
-        if sum(a[0:i + 1]) % 2 == 0:
-            ben += 1
+            selected_prime = primes[0]
+            primes = [num for num in primes if num % selected_prime != 0]
+            turns += 1
+
+        if turns % 2 == 0:
+            return "Ben"
         else:
-            maria += 1
-    if ben > maria:
-        return "Ben"
-    if maria > ben:
+            return "Maria"
+
+    winners = []
+    for n in nums:
+        winners.append(play_game(n))
+
+    maria_wins = winners.count("Maria")
+    ben_wins = winners.count("Ben")
+
+    if maria_wins > ben_wins:
         return "Maria"
-    return None
-
-
-def rm_multiples(ls, x):
-    """removes multiple
-    of primes
-    """
-    for i in range(2, len(ls)):
-        try:
-            ls[i * x] = 0
-        except (ValueError, IndexError):
-            break
-        
+    elif ben_wins > maria_wins:
+        return "Ben"
+    else:
+        return None
